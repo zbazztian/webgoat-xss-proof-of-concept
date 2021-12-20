@@ -40,10 +40,9 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        queries: security-extended
+        queries: security-and-quality
 
     - run: |
-       mvn -version
        ./delombok.sh
        mvn clean install -DskipTests
 
