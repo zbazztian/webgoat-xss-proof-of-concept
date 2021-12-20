@@ -1,6 +1,5 @@
 package org.owasp.webgoat;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hsqldb.server.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,31 +10,25 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
 import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.sql.Driver;
 import java.util.Map;
-
 
 /**
  * Rationale for this class: when the HSQLDB is started with jdbc:file:// it is only accessible from within the same
  * JVM. This can only be done if you start a standalone HSQLDB. We need both WebWolf and WebGoat to use the same database
  */
 @Configuration
-@Slf4j
 @ConditionalOnProperty(prefix = "webgoat.start", name = "hsqldb", havingValue = "true")
 public class HSQLDBDatabaseConfig {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(HSQLDBDatabaseConfig.class);
     @Value("${hsqldb.port:9001}")
     private int hsqldbPort;
     private Server server;
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    public Server hsqlStandalone(@Value("${webgoat.server.directory}") String directory,
-                                 @Value("${hsqldb.silent:true}") boolean silent,
-                                 @Value("${hsqldb.trace:false}") boolean trace,
-                                 @Value("${server.address}") String address) {
+    public Server hsqlStandalone(@Value("${webgoat.server.directory}") String directory, @Value("${hsqldb.silent:true}") boolean silent, @Value("${hsqldb.trace:false}") boolean trace, @Value("${server.address}") String address) {
         log.info("Starting internal database on port {} ...", hsqldbPort);
         server = new Server();
         server.setDatabaseName(0, "webgoat");
@@ -56,8 +49,7 @@ public class HSQLDBDatabaseConfig {
     @Bean
     @DependsOn("hsqlStandalone")
     @Primary
-    public DataSource dataSource(@Value("${spring.datasource.url}") String url,
-                                 @Value("${spring.datasource.driver-class-name}") String driverClassName) {
+    public DataSource dataSource(@Value("${spring.datasource.url}") String url, @Value("${spring.datasource.driver-class-name}") String driverClassName) {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource(url);
         driverManagerDataSource.setDriverClassName(driverClassName);
         return driverManagerDataSource;

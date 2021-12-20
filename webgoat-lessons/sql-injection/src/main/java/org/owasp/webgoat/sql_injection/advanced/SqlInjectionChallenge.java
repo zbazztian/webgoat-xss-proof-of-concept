@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.sql_injection.advanced;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.LessonDataSource;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.sql.*;
 
 /**
@@ -40,32 +37,27 @@ import java.sql.*;
  * @since 4/8/17.
  */
 @RestController
-@AssignmentHints(value = {"SqlInjectionChallenge1", "SqlInjectionChallenge2", "SqlInjectionChallenge3"})
-@Slf4j
+@AssignmentHints({"SqlInjectionChallenge1", "SqlInjectionChallenge2", "SqlInjectionChallenge3"})
 public class SqlInjectionChallenge extends AssignmentEndpoint {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SqlInjectionChallenge.class);
     private final LessonDataSource dataSource;
 
     public SqlInjectionChallenge(LessonDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    @PutMapping("/SqlInjectionAdvanced/challenge")
     //assignment path is bounded to class so we use different http method :-)
+    @PutMapping("/SqlInjectionAdvanced/challenge")
     @ResponseBody
     public AttackResult registerNewUser(@RequestParam String username_reg, @RequestParam String email_reg, @RequestParam String password_reg) throws Exception {
         AttackResult attackResult = checkArguments(username_reg, email_reg, password_reg);
-
         if (attackResult == null) {
-
-
             try (Connection connection = dataSource.getConnection()) {
-                String checkUserQuery = "select userid from sql_challenge_users where userid = '" + username_reg + "'";
+                String checkUserQuery = "select userid from sql_challenge_users where userid = \'" + username_reg + "\'";
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(checkUserQuery);
-
                 if (resultSet.next()) {
-                    if (username_reg.contains("tom'")) {
+                    if (username_reg.contains("tom\'")) {
                         attackResult = success(this).feedback("user.exists").build();
                     } else {
                         attackResult = failed(this).feedback("user.exists").feedbackArgs(username_reg).build();
@@ -95,4 +87,3 @@ public class SqlInjectionChallenge extends AssignmentEndpoint {
         return null;
     }
 }
-

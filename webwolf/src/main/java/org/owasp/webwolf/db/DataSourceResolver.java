@@ -19,13 +19,10 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf.db;
 
 import static org.owasp.webwolf.db.ActuatorDsJsonParser.getDsHealthStatus;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -40,31 +37,21 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
- * 
  * @author Angel Olle Blazquez
- *
  */
-
-@Slf4j
 @Component
 @EnableRetry
 public class DataSourceResolver {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DataSourceResolver.class);
     @Value("${webgoat.actuator.base.url}")
     private String baseUrl;
-
     @Value("${webgoat.actuator.health.db.path:/health}")
     private String dbHealthPath;
-
     @Value("${webgoat.actuator.configprops.path:/configprops}")
     private String configPropsPath;
-    
     @Autowired
     ApplicationContext ctx;
 
@@ -82,12 +69,7 @@ public class DataSourceResolver {
     }
 
     @Bean
-    @Retryable(maxAttemptsExpression = "${webwolf.datasource-discovery.retry.max-attempts:5}",
-        value = Exception.class,
-        backoff = @Backoff(
-            multiplierExpression = "${webwolf.datasource-discovery.retry.backoff.multiplier:1.5}",
-            maxDelayExpression = "${webwolf.datasource-discovery.retry.backoff.max-delay:30000}",
-            delayExpression = "${webwolf.datasource-discovery.retry.backoff.delay:5000}"))
+    @Retryable(maxAttemptsExpression = "${webwolf.datasource-discovery.retry.max-attempts:5}", value = Exception.class, backoff = @Backoff(multiplierExpression = "${webwolf.datasource-discovery.retry.backoff.multiplier:1.5}", maxDelayExpression = "${webwolf.datasource-discovery.retry.backoff.max-delay:30000}", delayExpression = "${webwolf.datasource-discovery.retry.backoff.delay:5000}"))
     public DataSourceProperties dsConfigDiscovery(RestTemplate restTemplate) {
         healthCheck(restTemplate);
         return restTemplate.getForObject(baseUrl + configPropsPath, DataSourceProperties.class);

@@ -19,17 +19,14 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.jwt.votes;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Getter;
 
 /**
  * @author nbaars
  * @since 5/2/17.
  */
-@Getter
 public class Vote {
     @JsonView(Views.GuestView.class)
     private final String title;
@@ -45,7 +42,6 @@ public class Vote {
     private boolean votingAllowed = true;
     @JsonView(Views.UserView.class)
     private long average = 0;
-
 
     public Vote(String title, String information, String imageSmall, String imageBig, int numberOfVotes, int totalVotes) {
         this.title = title;
@@ -68,5 +64,33 @@ public class Vote {
 
     private long calculateStars(int totalVotes) {
         return Math.round(((double) numberOfVotes / (double) totalVotes) * 4);
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getInformation() {
+        return this.information;
+    }
+
+    public String getImageSmall() {
+        return this.imageSmall;
+    }
+
+    public String getImageBig() {
+        return this.imageBig;
+    }
+
+    public int getNumberOfVotes() {
+        return this.numberOfVotes;
+    }
+
+    public boolean isVotingAllowed() {
+        return this.votingAllowed;
+    }
+
+    public long getAverage() {
+        return this.average;
     }
 }

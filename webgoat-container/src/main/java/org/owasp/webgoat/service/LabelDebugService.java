@@ -26,11 +26,8 @@
  * Source for this application is maintained at
  * https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.session.LabelDebugger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +36,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,14 +46,11 @@ import java.util.Map;
  * @version $Id: $Id
  */
 @Controller
-@Slf4j
-@AllArgsConstructor
 public class LabelDebugService {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LabelDebugService.class);
     private static final String URL_DEBUG_LABELS_MVC = "/service/debug/labels.mvc";
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_SUCCESS = "success";
-
     private LabelDebugger labelDebugger;
 
     /**
@@ -66,8 +59,8 @@ public class LabelDebugService {
      * @return a {@link org.springframework.http.ResponseEntity} object.
      */
     @RequestMapping(path = URL_DEBUG_LABELS_MVC, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<Map<String, Object>> checkDebuggingStatus() {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkDebuggingStatus() {
         log.debug("Checking label debugging, it is {}", labelDebugger.isEnabled());
         Map<String, Object> result = createResponse(labelDebugger.isEnabled());
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -80,8 +73,8 @@ public class LabelDebugService {
      * @return a {@link org.springframework.http.ResponseEntity} object.
      */
     @RequestMapping(value = URL_DEBUG_LABELS_MVC, produces = MediaType.APPLICATION_JSON_VALUE, params = KEY_ENABLED)
-    public @ResponseBody
-    ResponseEntity<Map<String, Object>> setDebuggingStatus(@RequestParam("enabled") Boolean enabled) throws Exception {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> setDebuggingStatus(@RequestParam("enabled") Boolean enabled) throws Exception {
         log.debug("Setting label debugging to {} ", labelDebugger.isEnabled());
         Map<String, Object> result = createResponse(enabled);
         labelDebugger.setEnabled(enabled);
@@ -97,5 +90,9 @@ public class LabelDebugService {
         result.put(KEY_SUCCESS, Boolean.TRUE);
         result.put(KEY_ENABLED, enabled);
         return result;
+    }
+
+    public LabelDebugService(final LabelDebugger labelDebugger) {
+        this.labelDebugger = labelDebugger;
     }
 }

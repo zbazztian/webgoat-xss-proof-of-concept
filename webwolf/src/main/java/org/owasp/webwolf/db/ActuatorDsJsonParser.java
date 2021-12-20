@@ -19,40 +19,22 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf.db;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
- * 
  * @author Angel Olle Blazquez
- *
  */
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ActuatorDsJsonParser {
-
     protected static final String getDsPropertyFromConfigProps(JsonNode node, String propertyName) {
-        return node
-            .get("application")
-            .get("beans")
-            .get("spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties")
-            .get("properties")
-            .get(propertyName)
-            .asText();
+        return node.get("application").get("beans").get("spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties").get("properties").get(propertyName).asText();
     }
 
     protected static final String getDsHealthStatus(JsonNode node) {
-        return node
-            .get("components")
-            .get("db")
-            .get("components")
-            .get("dataSource")
-            .get("status")
-            .asText();
+        return node.get("components").get("db").get("components").get("dataSource").get("status").asText();
+    }
+
+    private ActuatorDsJsonParser() {
     }
 }

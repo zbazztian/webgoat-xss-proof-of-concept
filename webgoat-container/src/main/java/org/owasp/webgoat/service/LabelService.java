@@ -26,11 +26,8 @@
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository
  * for free software projects.
  */
-
 package org.owasp.webgoat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.i18n.Messages;
 import org.owasp.webgoat.i18n.PluginMessages;
 import org.springframework.http.HttpStatus;
@@ -43,11 +40,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Properties;
-
 
 /**
  * <p>LabelService class.</p>
@@ -55,10 +50,8 @@ import java.util.Properties;
  * @author zupzup
  */
 @RestController
-@Slf4j
-@AllArgsConstructor
 public class LabelService {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LabelService.class);
     public static final String URL_LABELS_MVC = "/service/labels.mvc";
     private LocaleResolver localeResolver;
     private Messages messages;
@@ -88,5 +81,11 @@ public class LabelService {
         allProperties.putAll(messages.getMessages());
         allProperties.putAll(pluginMessages.getMessages());
         return new ResponseEntity<>(allProperties, HttpStatus.OK);
+    }
+
+    public LabelService(final LocaleResolver localeResolver, final Messages messages, final PluginMessages pluginMessages) {
+        this.localeResolver = localeResolver;
+        this.messages = messages;
+        this.pluginMessages = pluginMessages;
     }
 }

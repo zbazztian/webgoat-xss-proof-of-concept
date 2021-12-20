@@ -27,10 +27,8 @@
  * @version $Id: $Id
  * @since December 12, 2015
  */
-
 package org.owasp.webgoat;
 
-import lombok.AllArgsConstructor;
 import org.owasp.webgoat.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,29 +46,16 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
  * Security configuration for WebGoat.
  */
 @Configuration
-@AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final UserService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry security = http
-                .authorizeRequests()
-                .antMatchers("/css/**", "/images/**", "/js/**", "fonts/**", "/plugins/**", "/registration", "/register.mvc", "/actuator/**").permitAll()
-                .anyRequest().authenticated();
-        security.and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/welcome.mvc", true)
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .permitAll();
-        security.and()
-                .logout().deleteCookies("JSESSIONID").invalidateHttpSession(true);
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry security = http.authorizeRequests().antMatchers("/css/**", "/images/**", "/js/**", "fonts/**", "/plugins/**", "/registration", "/register.mvc", "/actuator/**").permitAll().anyRequest().authenticated();
+        security.and().formLogin().loginPage("/login").defaultSuccessUrl("/welcome.mvc", true).usernameParameter("username").passwordParameter("password").permitAll();
+        security.and().logout().deleteCookies("JSESSIONID").invalidateHttpSession(true);
         security.and().csrf().disable();
-
         http.headers().cacheControl().disable();
         http.exceptionHandling().authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login"));
     }
@@ -96,5 +81,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public NoOpPasswordEncoder passwordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    }
+
+    public WebSecurityConfig(final UserService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 }

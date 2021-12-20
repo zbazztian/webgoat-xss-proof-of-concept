@@ -1,7 +1,5 @@
 package org.owasp.webgoat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.lessons.Assignment;
 import org.owasp.webgoat.lessons.LessonInfoModel;
@@ -12,12 +10,10 @@ import org.owasp.webgoat.users.UserTrackerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * <p>LessonProgressService class.</p>
@@ -25,9 +21,7 @@ import java.util.Map;
  * @author webgoat
  */
 @Controller
-@AllArgsConstructor
 public class LessonProgressService {
-
     private final UserTrackerRepository userTrackerRepository;
     private final WebSession webSession;
 
@@ -55,21 +49,18 @@ public class LessonProgressService {
         for (Map.Entry<Assignment, Boolean> entry : map.entrySet()) {
             Assignment storedAssignment = entry.getKey();
             for (Assignment lessonAssignment : currentLesson.getAssignments()) {
-                if (lessonAssignment.getName().equals(storedAssignment.getName())
-                        && !lessonAssignment.getPath().equals(storedAssignment.getPath())) {
+                if (lessonAssignment.getName().equals(storedAssignment.getName()) && !lessonAssignment.getPath().equals(storedAssignment.getPath())) {
                     //here a stored path in the assignments table will be corrected for the JSON output
                     //with the value of the actual expected path
                     storedAssignment.setPath(lessonAssignment.getPath());
                     result.add(new LessonOverview(storedAssignment, entry.getValue()));
                     break;
-
                 } else if (lessonAssignment.getName().equals(storedAssignment.getName())) {
                     result.add(new LessonOverview(storedAssignment, entry.getValue()));
                     break;
                 }
             }
             //assignments not in the list will not be put in the lesson progress JSON output
-
         }
         return result;
     }
@@ -84,19 +75,32 @@ public class LessonProgressService {
                     break;
                 }
             }
-
         }
         return result;
     }
 
-    @AllArgsConstructor
-    @Getter
     //Jackson does not really like returning a map of <Assignment, Boolean> directly, see http://stackoverflow.com/questions/11628698/can-we-make-object-as-key-in-map-when-using-json
     //so creating intermediate object is the easiest solution
     private static class LessonOverview {
-
         private Assignment assignment;
         private Boolean solved;
 
+        public LessonOverview(final Assignment assignment, final Boolean solved) {
+            this.assignment = assignment;
+            this.solved = solved;
+        }
+
+        public Assignment getAssignment() {
+            return this.assignment;
+        }
+
+        public Boolean getSolved() {
+            return this.solved;
+        }
+    }
+
+    public LessonProgressService(final UserTrackerRepository userTrackerRepository, final WebSession webSession) {
+        this.userTrackerRepository = userTrackerRepository;
+        this.webSession = webSession;
     }
 }

@@ -1,14 +1,10 @@
-
 package org.owasp.webgoat.users;
 
-import lombok.Getter;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.lessons.Assignment;
-
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 /**
  * ************************************************************************************************
@@ -42,17 +38,14 @@ import java.util.stream.Collectors;
  */
 @Entity
 public class LessonTracker {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Getter
     private String lessonName;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private final Set<Assignment> solvedAssignments = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private final Set<Assignment> allAssignments = new HashSet<>();
-    @Getter
     private int numberOfAttempts = 0;
     @Version
     private Integer version;
@@ -104,11 +97,17 @@ public class LessonTracker {
      * @return list containing all the assignments solved or not
      */
     public Map<Assignment, Boolean> getLessonOverview() {
-        List<Assignment> notSolved = allAssignments.stream()
-                .filter(i -> !solvedAssignments.contains(i))
-                .collect(Collectors.toList());
+        List<Assignment> notSolved = allAssignments.stream().filter(i -> !solvedAssignments.contains(i)).collect(Collectors.toList());
         Map<Assignment, Boolean> overview = notSolved.stream().collect(Collectors.toMap(a -> a, b -> false));
         overview.putAll(solvedAssignments.stream().collect(Collectors.toMap(a -> a, b -> true)));
         return overview;
+    }
+
+    public String getLessonName() {
+        return this.lessonName;
+    }
+
+    public int getNumberOfAttempts() {
+        return this.numberOfAttempts;
     }
 }

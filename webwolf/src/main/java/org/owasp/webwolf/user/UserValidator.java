@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf.user;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -32,9 +30,7 @@ import org.springframework.validation.Validator;
  * @since 3/19/17.
  */
 @Component
-@AllArgsConstructor
 public class UserValidator implements Validator {
-
     private final UserRepository userRepository;
 
     @Override
@@ -45,13 +41,15 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         UserForm userForm = (UserForm) o;
-
         if (userRepository.findByUsername(userForm.getUsername()) != null) {
             errors.rejectValue("username", "username.duplicate");
         }
-
         if (!userForm.getMatchingPassword().equals(userForm.getPassword())) {
             errors.rejectValue("matchingPassword", "password.diff");
         }
+    }
+
+    public UserValidator(final UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

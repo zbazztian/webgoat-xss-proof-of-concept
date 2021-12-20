@@ -20,31 +20,19 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.hijacksession.cas;
 
 import java.security.Principal;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-
 /**
- *
  * @author Angel Olle Blazquez
- *
  */
-
-@Getter
-@ToString
 public class Authentication implements Principal {
-
     private boolean authenticated = false;
     private String name;
     private Object credentials;
     private String id;
 
-    @Builder
     public Authentication(String name, Object credentials, String id) {
         this.name = name;
         this.credentials = credentials;
@@ -64,4 +52,67 @@ public class Authentication implements Principal {
         this.id = id;
     }
 
+
+    public static class AuthenticationBuilder {
+        private String name;
+        private Object credentials;
+        private String id;
+
+        AuthenticationBuilder() {
+        }
+
+        /**
+         * @return {@code this}.
+         */
+        public Authentication.AuthenticationBuilder name(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * @return {@code this}.
+         */
+        public Authentication.AuthenticationBuilder credentials(final Object credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        /**
+         * @return {@code this}.
+         */
+        public Authentication.AuthenticationBuilder id(final String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Authentication build() {
+            return new Authentication(this.name, this.credentials, this.id);
+        }
+
+        @Override
+        public String toString() {
+            return "Authentication.AuthenticationBuilder(name=" + this.name + ", credentials=" + this.credentials + ", id=" + this.id + ")";
+        }
+    }
+
+    public static Authentication.AuthenticationBuilder builder() {
+        return new Authentication.AuthenticationBuilder();
+    }
+
+    public boolean isAuthenticated() {
+        return this.authenticated;
+    }
+
+    public Object getCredentials() {
+        return this.credentials;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Authentication(authenticated=" + this.isAuthenticated() + ", name=" + this.getName() + ", credentials=" + this.getCredentials() + ", id=" + this.getId() + ")";
+    }
 }

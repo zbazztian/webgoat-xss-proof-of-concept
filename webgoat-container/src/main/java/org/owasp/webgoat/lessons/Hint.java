@@ -24,10 +24,7 @@
  * projects.
  * 
  */
-
 package org.owasp.webgoat.lessons;
-
-import lombok.Value;
 
 /**
  * <p>Hint class.</p>
@@ -35,9 +32,50 @@ import lombok.Value;
  * @author rlawson
  * @version $Id: $Id
  */
-@Value
-public class Hint {
+public final class Hint {
+    private final String hint;
+    private final String assignmentPath;
 
-    private String hint;
-    private String assignmentPath;
+    public Hint(final String hint, final String assignmentPath) {
+        this.hint = hint;
+        this.assignmentPath = assignmentPath;
+    }
+
+    public String getHint() {
+        return this.hint;
+    }
+
+    public String getAssignmentPath() {
+        return this.assignmentPath;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Hint)) return false;
+        final Hint other = (Hint) o;
+        final Object this$hint = this.getHint();
+        final Object other$hint = other.getHint();
+        if (this$hint == null ? other$hint != null : !this$hint.equals(other$hint)) return false;
+        final Object this$assignmentPath = this.getAssignmentPath();
+        final Object other$assignmentPath = other.getAssignmentPath();
+        if (this$assignmentPath == null ? other$assignmentPath != null : !this$assignmentPath.equals(other$assignmentPath)) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $hint = this.getHint();
+        result = result * PRIME + ($hint == null ? 43 : $hint.hashCode());
+        final Object $assignmentPath = this.getAssignmentPath();
+        result = result * PRIME + ($assignmentPath == null ? 43 : $assignmentPath.hashCode());
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Hint(hint=" + this.getHint() + ", assignmentPath=" + this.getAssignmentPath() + ")";
+    }
 }

@@ -1,17 +1,13 @@
-
 package org.owasp.webgoat.users;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.lessons.Assignment;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 
 /**
  * ************************************************************************************************
@@ -43,10 +39,9 @@ import java.util.stream.Collectors;
  * @version $Id: $Id
  * @since October 29, 2003
  */
-@Slf4j
 @Entity
 public class UserTracker {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserTracker.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -55,7 +50,8 @@ public class UserTracker {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<LessonTracker> lessonTrackers = new HashSet<>();
 
-    private UserTracker() {}
+    private UserTracker() {
+    }
 
     public UserTracker(final String user) {
         this.user = user;
@@ -68,8 +64,7 @@ public class UserTracker {
      * @return a lesson tracker created if not already present
      */
     public LessonTracker getLessonTracker(Lesson lesson) {
-        Optional<LessonTracker> lessonTracker = lessonTrackers
-                .stream().filter(l -> l.getLessonName().equals(lesson.getId())).findFirst();
+        Optional<LessonTracker> lessonTracker = lessonTrackers.stream().filter(l -> l.getLessonName().equals(lesson.getId())).findFirst();
         if (!lessonTracker.isPresent()) {
             LessonTracker newLessonTracker = new LessonTracker(lesson);
             lessonTrackers.add(newLessonTracker);

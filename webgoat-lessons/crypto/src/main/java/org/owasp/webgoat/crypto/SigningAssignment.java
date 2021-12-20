@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.crypto;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
 import org.owasp.webgoat.assignments.AttackResult;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidAlgorithmParameterException;
@@ -41,30 +38,28 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 
 @RestController
-@AssignmentHints({"crypto-signing.hints.1","crypto-signing.hints.2", "crypto-signing.hints.3", "crypto-signing.hints.4"})
-@Slf4j
+@AssignmentHints({"crypto-signing.hints.1", "crypto-signing.hints.2", "crypto-signing.hints.3", "crypto-signing.hints.4"})
 public class SigningAssignment extends AssignmentEndpoint {
-	
-	@RequestMapping(path="/crypto/signing/getprivate",produces=MediaType.TEXT_HTML_VALUE)
-    @ResponseBody
-    public String getPrivateKey(HttpServletRequest request) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-		
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SigningAssignment.class);
+
+	@RequestMapping(path = "/crypto/signing/getprivate", produces = MediaType.TEXT_HTML_VALUE)
+	@ResponseBody
+	public String getPrivateKey(HttpServletRequest request) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 		String privateKey = (String) request.getSession().getAttribute("privateKeyString");
-		if (privateKey == null) {			
+		if (privateKey == null) {
 			KeyPair keyPair = CryptoUtil.generateKeyPair();
 			privateKey = CryptoUtil.getPrivateKeyInPEM(keyPair);
 			request.getSession().setAttribute("privateKeyString", privateKey);
 			request.getSession().setAttribute("keyPair", keyPair);
 		}
 		return privateKey;
-    }
-	
-    @PostMapping("/crypto/signing/verify")
-    @ResponseBody
-    public AttackResult completed(HttpServletRequest request, @RequestParam String modulus, @RequestParam String signature) {
-		
+	}
+
+	@PostMapping("/crypto/signing/verify")
+	@ResponseBody
+	public AttackResult completed(HttpServletRequest request, @RequestParam String modulus, @RequestParam String signature) {
 		String tempModulus = modulus;/* used to validate the modulus of the public key but might need to be corrected */
-    	KeyPair keyPair = (KeyPair) request.getSession().getAttribute("keyPair");
+		KeyPair keyPair = (KeyPair) request.getSession().getAttribute("keyPair");
 		RSAPublicKey rsaPubKey = (RSAPublicKey) keyPair.getPublic();
 		if (tempModulus.length() == 512) {
 			tempModulus = "00".concat(tempModulus);
@@ -80,7 +75,5 @@ public class SigningAssignment extends AssignmentEndpoint {
 			log.warn("signature incorrect");
 			return failed(this).feedback("crypto-signing.notok").build();
 		}
-       
-    }
-    
+	}
 }

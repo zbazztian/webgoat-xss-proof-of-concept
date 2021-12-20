@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.challenges.challenge5;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.LessonDataSource;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AttackResult;
@@ -32,15 +30,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @RestController
-@Slf4j
 public class Assignment5 extends AssignmentEndpoint {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Assignment5.class);
     private final LessonDataSource dataSource;
 
     public Assignment5(LessonDataSource dataSource) {
@@ -57,9 +53,8 @@ public class Assignment5 extends AssignmentEndpoint {
             return failed(this).feedback("user.not.larry").feedbackArgs(username_login).build();
         }
         try (var connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select password from challenge_users where userid = '" + username_login + "' and password = '" + password_login + "'");
+            PreparedStatement statement = connection.prepareStatement("select password from challenge_users where userid = \'" + username_login + "\' and password = \'" + password_login + "\'");
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
                 return success(this).feedback("challenge.solved").feedbackArgs(Flag.FLAGS.get(5)).build();
             } else {
@@ -68,4 +63,3 @@ public class Assignment5 extends AssignmentEndpoint {
         }
     }
 }
-

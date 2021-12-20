@@ -26,12 +26,8 @@
  * Source for this application is maintained at
  * https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.owasp.webgoat.i18n.PluginMessages;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.session.Course;
@@ -42,7 +38,6 @@ import org.owasp.webgoat.users.UserTrackerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +48,7 @@ import java.util.List;
  * @version $Id: $Id
  */
 @Controller
-@AllArgsConstructor
 public class ReportCardService {
-
     private final WebSession webSession;
     private final UserTrackerRepository userTrackerRepository;
     private final Course course;
@@ -70,7 +63,6 @@ public class ReportCardService {
         final ReportCard reportCard = new ReportCard();
         reportCard.setTotalNumberOfLessons(course.getTotalOfLessons());
         reportCard.setTotalNumberOfAssignments(course.getTotalOfAssignments());
-
         UserTracker userTracker = userTrackerRepository.findByUser(webSession.getUserName());
         reportCard.setNumberOfAssignmentsSolved(userTracker.numberOfAssignmentsSolved());
         reportCard.setNumberOfLessonsSolved(userTracker.numberOfLessonsSolved());
@@ -85,23 +77,99 @@ public class ReportCardService {
         return reportCard;
     }
 
-    @Getter
-    @Setter
-    private final class ReportCard {
 
+    private final class ReportCard {
         private int totalNumberOfLessons;
         private int totalNumberOfAssignments;
         private int solvedLessons;
         private int numberOfAssignmentsSolved;
         private int numberOfLessonsSolved;
-        private List<LessonStatistics> lessonStatistics =  new ArrayList<>();
+        private List<LessonStatistics> lessonStatistics = new ArrayList<>();
+
+        public int getTotalNumberOfLessons() {
+            return this.totalNumberOfLessons;
+        }
+
+        public int getTotalNumberOfAssignments() {
+            return this.totalNumberOfAssignments;
+        }
+
+        public int getSolvedLessons() {
+            return this.solvedLessons;
+        }
+
+        public int getNumberOfAssignmentsSolved() {
+            return this.numberOfAssignmentsSolved;
+        }
+
+        public int getNumberOfLessonsSolved() {
+            return this.numberOfLessonsSolved;
+        }
+
+        public List<LessonStatistics> getLessonStatistics() {
+            return this.lessonStatistics;
+        }
+
+        public void setTotalNumberOfLessons(final int totalNumberOfLessons) {
+            this.totalNumberOfLessons = totalNumberOfLessons;
+        }
+
+        public void setTotalNumberOfAssignments(final int totalNumberOfAssignments) {
+            this.totalNumberOfAssignments = totalNumberOfAssignments;
+        }
+
+        public void setSolvedLessons(final int solvedLessons) {
+            this.solvedLessons = solvedLessons;
+        }
+
+        public void setNumberOfAssignmentsSolved(final int numberOfAssignmentsSolved) {
+            this.numberOfAssignmentsSolved = numberOfAssignmentsSolved;
+        }
+
+        public void setNumberOfLessonsSolved(final int numberOfLessonsSolved) {
+            this.numberOfLessonsSolved = numberOfLessonsSolved;
+        }
+
+        public void setLessonStatistics(final List<LessonStatistics> lessonStatistics) {
+            this.lessonStatistics = lessonStatistics;
+        }
     }
 
-    @Setter
-    @Getter
+
     private final class LessonStatistics {
         private String name;
         private boolean solved;
         private int numberOfAttempts;
+
+        public void setName(final String name) {
+            this.name = name;
+        }
+
+        public void setSolved(final boolean solved) {
+            this.solved = solved;
+        }
+
+        public void setNumberOfAttempts(final int numberOfAttempts) {
+            this.numberOfAttempts = numberOfAttempts;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public boolean isSolved() {
+            return this.solved;
+        }
+
+        public int getNumberOfAttempts() {
+            return this.numberOfAttempts;
+        }
+    }
+
+    public ReportCardService(final WebSession webSession, final UserTrackerRepository userTrackerRepository, final Course course, final PluginMessages pluginMessages) {
+        this.webSession = webSession;
+        this.userTrackerRepository = userTrackerRepository;
+        this.course = course;
+        this.pluginMessages = pluginMessages;
     }
 }

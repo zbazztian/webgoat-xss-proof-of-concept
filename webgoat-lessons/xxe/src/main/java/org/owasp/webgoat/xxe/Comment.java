@@ -19,14 +19,7 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.xxe;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,14 +27,47 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author nbaars
  * @since 4/8/17.
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @XmlRootElement
-@ToString
 public class Comment {
     private String user;
     private String dateTime;
     private String text;
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public String getDateTime() {
+        return this.dateTime;
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+    public void setDateTime(final String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setText(final String text) {
+        this.text = text;
+    }
+
+    public Comment(final String user, final String dateTime, final String text) {
+        this.user = user;
+        this.dateTime = dateTime;
+        this.text = text;
+    }
+
+    public Comment() {
+    }
+
+    @Override
+    public String toString() {
+        return "Comment(user=" + this.getUser() + ", dateTime=" + this.getDateTime() + ", text=" + this.getText() + ")";
+    }
 }

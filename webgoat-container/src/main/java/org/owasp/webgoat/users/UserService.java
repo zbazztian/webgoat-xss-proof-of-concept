@@ -1,6 +1,5 @@
 package org.owasp.webgoat.users;
 
-import lombok.AllArgsConstructor;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.owasp.webgoat.session.WebSession;
@@ -8,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,9 +15,7 @@ import java.util.function.Function;
  * @since 3/19/17.
  */
 @Service
-@AllArgsConstructor
 public class UserService implements UserDetailsService {
-
     private final UserRepository userRepository;
     private final UserTrackerRepository userTrackerRepository;
     private final JdbcTemplate jdbcTemplate;
@@ -40,7 +36,6 @@ public class UserService implements UserDetailsService {
         //get user if there exists one by the name
         var userAlreadyExists = userRepository.existsByUsername(username);
         var webGoatUser = userRepository.save(new WebGoatUser(username, password));
-
         if (!userAlreadyExists) {
             userTrackerRepository.save(new UserTracker(username)); //if user previously existed it will not get another tracker
             createLessonsForUser(webGoatUser);
@@ -56,4 +51,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public UserService(final UserRepository userRepository, final UserTrackerRepository userTrackerRepository, final JdbcTemplate jdbcTemplate, final Function<String, Flyway> flywayLessons) {
+        this.userRepository = userRepository;
+        this.userTrackerRepository = userTrackerRepository;
+        this.jdbcTemplate = jdbcTemplate;
+        this.flywayLessons = flywayLessons;
+    }
 }

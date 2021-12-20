@@ -1,11 +1,9 @@
 package org.owasp.webgoat.users;
 
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -16,13 +14,10 @@ import java.util.Collections;
  * @author nbaars
  * @since 3/19/17.
  */
-@Getter
 @Entity
 public class WebGoatUser implements UserDetails {
-
     public static final String ROLE_USER = "WEBGOAT_USER";
     public static final String ROLE_ADMIN = "WEBGOAT_ADMIN";
-
     @Id
     private String username;
     private String password;
@@ -43,7 +38,6 @@ public class WebGoatUser implements UserDetails {
         this.role = role;
         createUser();
     }
-
 
     public void createUser() {
         this.user = new User(username, password, getAuthorities());
@@ -85,7 +79,7 @@ public class WebGoatUser implements UserDetails {
         return this.user.isEnabled();
     }
 
-
+    public User getUser() {
+        return this.user;
+    }
 }
-
-

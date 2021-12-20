@@ -1,7 +1,5 @@
 package org.owasp.webgoat.missing_ac;
 
-import lombok.Getter;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
@@ -31,10 +29,8 @@ import java.util.Base64;
  * projects.
  * <p>
  */
-@Getter
 public class DisplayUser {
     //intended to provide a display version of WebGoatUser for admins to view user attributes
-
     private String username;
     private boolean admin;
     private String userHash;
@@ -42,7 +38,6 @@ public class DisplayUser {
     public DisplayUser(User user, String passwordSalt) {
         this.username = user.getUsername();
         this.admin = user.isAdmin();
-
         try {
             this.userHash = genUserHash(user.getUsername(), user.getPassword(), passwordSalt);
         } catch (Exception ex) {
@@ -59,4 +54,15 @@ public class DisplayUser {
         return Base64.getEncoder().encodeToString(hash);
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
+    public boolean isAdmin() {
+        return this.admin;
+    }
+
+    public String getUserHash() {
+        return this.userHash;
+    }
 }

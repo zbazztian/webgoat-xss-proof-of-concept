@@ -1,4 +1,3 @@
-
 /**
  * ************************************************************************************************
  * This file is part of WebGoat, an Open Web Application Security Project utility. For details,
@@ -28,10 +27,8 @@
  * @version $Id: $Id
  * @since December 12, 2015
  */
-
 package org.owasp.webgoat;
 
-import lombok.extern.slf4j.Slf4j;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.owasp.webgoat.asciidoc.*;
@@ -40,7 +37,6 @@ import org.thymeleaf.IEngineConfiguration;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresource.ITemplateResource;
 import org.thymeleaf.templateresource.StringTemplateResource;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,7 +44,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import static org.asciidoctor.Asciidoctor.Factory.create;
 
 /**
@@ -58,9 +53,8 @@ import static org.asciidoctor.Asciidoctor.Factory.create;
  * <div th:replace="doc:AccessControlMatrix_plan.adoc"></div>
  * </code>
  */
-@Slf4j
 public class AsciiDoctorTemplateResolver extends FileTemplateResolver {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AsciiDoctorTemplateResolver.class);
     private static final Asciidoctor asciidoctor = create();
     private static final String PREFIX = "doc:";
     private final Language language;
@@ -85,7 +79,6 @@ public class AsciiDoctorTemplateResolver extends FileTemplateResolver {
                 extensionRegistry.inlineMacro("webGoatTempDir", WebGoatTmpDirMacro.class);
                 extensionRegistry.inlineMacro("operatingSystem", OperatingSystemMacro.class);
                 extensionRegistry.inlineMacro("username", UsernameMacro.class);
-
                 StringWriter writer = new StringWriter();
                 asciidoctor.convert(new InputStreamReader(is), writer, createAttributes());
                 return new StringTemplateResource(writer.getBuffer().toString());
@@ -117,10 +110,8 @@ public class AsciiDoctorTemplateResolver extends FileTemplateResolver {
         attributes.put("source-highlighter", "coderay");
         attributes.put("backend", "xhtml");
         attributes.put("icons", org.asciidoctor.Attributes.FONT_ICONS);
-
         Map<String, Object> options = new HashMap<>();
         options.put("attributes", attributes);
-
         return options;
     }
 }

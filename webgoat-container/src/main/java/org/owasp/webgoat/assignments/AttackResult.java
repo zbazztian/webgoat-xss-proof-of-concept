@@ -22,18 +22,14 @@
  * projects.
  * <p>
  */
-
 package org.owasp.webgoat.assignments;
 
-import lombok.Getter;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.owasp.webgoat.i18n.PluginMessages;
 
 public class AttackResult {
 
-
     public static class AttackResultBuilder {
-
         private boolean lessonCompleted;
         private PluginMessages messages;
         private Object[] feedbackArgs;
@@ -94,15 +90,10 @@ public class AttackResult {
         }
     }
 
-    @Getter
     private boolean lessonCompleted;
-    @Getter
     private String feedback;
-    @Getter
     private String output;
-    @Getter
     private final String assignment;
-    @Getter
     private boolean attemptWasMade;
 
     public AttackResult(boolean lessonCompleted, String feedback, String output, String assignment, boolean attemptWasMade) {
@@ -119,5 +110,25 @@ public class AttackResult {
 
     public boolean assignmentSolved() {
         return lessonCompleted;
+    }
+
+    public boolean isLessonCompleted() {
+        return this.lessonCompleted;
+    }
+
+    public String getFeedback() {
+        return this.feedback;
+    }
+
+    public String getOutput() {
+        return this.output;
+    }
+
+    public String getAssignment() {
+        return this.assignment;
+    }
+
+    public boolean isAttemptWasMade() {
+        return this.attemptWasMade;
     }
 }

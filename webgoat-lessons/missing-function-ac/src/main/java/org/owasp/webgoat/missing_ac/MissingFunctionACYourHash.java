@@ -19,26 +19,20 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.missing_ac;
 
-import lombok.RequiredArgsConstructor;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
 import org.owasp.webgoat.assignments.AttackResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import static org.owasp.webgoat.missing_ac.MissingFunctionAC.PASSWORD_SALT_SIMPLE;
 
 @RestController
 @AssignmentHints({"access-control.hash.hint1", "access-control.hash.hint2", "access-control.hash.hint3", "access-control.hash.hint4", "access-control.hash.hint5"})
-@RequiredArgsConstructor
 public class MissingFunctionACYourHash extends AssignmentEndpoint {
-
     private final MissingAccessControlUserRepository userRepository;
-
 
     @PostMapping(path = "/access-control/user-hash", produces = {"application/json"})
     @ResponseBody
@@ -50,5 +44,9 @@ public class MissingFunctionACYourHash extends AssignmentEndpoint {
         } else {
             return failed(this).build();
         }
+    }
+
+    public MissingFunctionACYourHash(final MissingAccessControlUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

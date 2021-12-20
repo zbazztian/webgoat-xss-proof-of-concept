@@ -19,11 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf.mailbox;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webwolf.user.UserRepository;
 import org.owasp.webwolf.user.WebGoatUser;
 import org.springframework.http.HttpStatus;
@@ -36,18 +33,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 
 @RestController
-@AllArgsConstructor
-@Slf4j
 public class MailboxController {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MailboxController.class);
     private final MailboxRepository mailboxRepository;
 
-    @GetMapping(value = "/WebWolf/mail")
+    @GetMapping("/WebWolf/mail")
     public ModelAndView mail() {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ModelAndView modelAndView = new ModelAndView();
@@ -60,7 +54,7 @@ public class MailboxController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/mail")
+    @PostMapping("/mail")
     public Callable<ResponseEntity<?>> sendEmail(@RequestBody Email email) {
         return () -> {
             mailboxRepository.save(email);
@@ -68,4 +62,7 @@ public class MailboxController {
         };
     }
 
+    public MailboxController(final MailboxRepository mailboxRepository) {
+        this.mailboxRepository = mailboxRepository;
+    }
 }

@@ -19,11 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.missing_ac;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.session.WebSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +30,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.owasp.webgoat.missing_ac.MissingFunctionAC.PASSWORD_SALT_ADMIN;
 import static org.owasp.webgoat.missing_ac.MissingFunctionAC.PASSWORD_SALT_SIMPLE;
 
@@ -45,16 +40,13 @@ import static org.owasp.webgoat.missing_ac.MissingFunctionAC.PASSWORD_SALT_SIMPL
  * Created by jason on 1/5/17.
  */
 @Controller
-@AllArgsConstructor
-@Slf4j
 public class MissingFunctionACUsers {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MissingFunctionACUsers.class);
     private final MissingAccessControlUserRepository userRepository;
     private final WebSession webSession;
 
     @GetMapping(path = {"access-control/users"})
     public ModelAndView listUsers() {
-
         ModelAndView model = new ModelAndView();
         model.setViewName("list_users");
         List<User> allUsers = userRepository.findAllUsers();
@@ -65,7 +57,6 @@ public class MissingFunctionACUsers {
             displayUsers.add(new DisplayUser(user, PASSWORD_SALT_SIMPLE));
         }
         model.addObject("allUsers", displayUsers);
-
         return model;
     }
 
@@ -95,9 +86,12 @@ public class MissingFunctionACUsers {
             log.error("Error creating new User", ex);
             return null;
         }
-
         //@RequestMapping(path = {"user/{username}","/"}, method = RequestMethod.DELETE, consumes = "application/json", produces = "application/json")
         //TODO implement delete method with id param and authorization
+    }
 
+    public MissingFunctionACUsers(final MissingAccessControlUserRepository userRepository, final WebSession webSession) {
+        this.userRepository = userRepository;
+        this.webSession = webSession;
     }
 }

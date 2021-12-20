@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.xxe;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.session.WebSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,14 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-@Slf4j
 public class Ping {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Ping.class);
     @Value("${webgoat.user.directory}")
     private String webGoatHomeDirectory;
     @Autowired

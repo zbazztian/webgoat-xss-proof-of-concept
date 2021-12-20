@@ -1,6 +1,5 @@
 package org.owasp.webgoat.challenges.challenge8;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AttackResult;
 import org.owasp.webgoat.challenges.Flag;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +19,8 @@ import java.util.stream.Collectors;
  * @since 4/8/17.
  */
 @RestController
-@Slf4j
 public class Assignment8 extends AssignmentEndpoint {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Assignment8.class);
     private static final Map<Integer, Integer> votes = new HashMap<>();
 
     static {
@@ -36,7 +33,7 @@ public class Assignment8 extends AssignmentEndpoint {
 
     @GetMapping(value = "/challenge/8/vote/{stars}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> vote(@PathVariable(value = "stars") int nrOfStars, HttpServletRequest request) {
+    public ResponseEntity<?> vote(@PathVariable("stars") int nrOfStars, HttpServletRequest request) {
         //Simple implementation of VERB Based Authentication
         String msg = "";
         if (request.getMethod().equals("GET")) {
@@ -66,4 +63,3 @@ public class Assignment8 extends AssignmentEndpoint {
         throw new IllegalStateException("Should never be called, challenge specific method");
     }
 }
-

@@ -19,13 +19,7 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.csrf;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -33,15 +27,52 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author nbaars
  * @since 4/8/17.
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @XmlRootElement
 public class Review {
     private String user;
     private String dateTime;
     private String text;
     private Integer stars;
-}
 
+    public String getUser() {
+        return this.user;
+    }
+
+    public String getDateTime() {
+        return this.dateTime;
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public Integer getStars() {
+        return this.stars;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+    public void setDateTime(final String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setText(final String text) {
+        this.text = text;
+    }
+
+    public void setStars(final Integer stars) {
+        this.stars = stars;
+    }
+
+    public Review(final String user, final String dateTime, final String text, final Integer stars) {
+        this.user = user;
+        this.dateTime = dateTime;
+        this.text = text;
+        this.stars = stars;
+    }
+
+    public Review() {
+    }
+}

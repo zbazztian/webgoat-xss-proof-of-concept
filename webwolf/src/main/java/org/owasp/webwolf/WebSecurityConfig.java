@@ -1,4 +1,3 @@
-
 /*
  * This file is part of WebGoat, an Open Web Application Security Project utility. For details, please see http://www.owasp.org/
  *
@@ -22,7 +21,6 @@
  */
 package org.owasp.webwolf;
 
-import lombok.AllArgsConstructor;
 import org.owasp.webwolf.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,29 +38,16 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
  * Security configuration for WebGoat.
  */
 @Configuration
-@AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final UserService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry security = http
-                .authorizeRequests()
-                .antMatchers("/css/**", "/images/**", "/js/**", "/fonts/**", "/webjars/**").permitAll()
-                .antMatchers("/WebWolf/**").authenticated()
-                .anyRequest().permitAll();
-        security.and().csrf().disable().formLogin()
-                .loginPage("/login").failureUrl("/login?error=true");
-        security.and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/WebWolf/home", true)
-                .permitAll();
-        security.and()
-                .logout()
-                .permitAll();
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry security = http.authorizeRequests().antMatchers("/css/**", "/images/**", "/js/**", "/fonts/**", "/webjars/**").permitAll().antMatchers("/WebWolf/**").authenticated().anyRequest().permitAll();
+        security.and().csrf().disable().formLogin().loginPage("/login").failureUrl("/login?error=true");
+        security.and().formLogin().loginPage("/login").defaultSuccessUrl("/WebWolf/home", true).permitAll();
+        security.and().logout().permitAll();
     }
 
     @Autowired
@@ -85,5 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public NoOpPasswordEncoder passwordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    }
+
+    public WebSecurityConfig(final UserService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 }

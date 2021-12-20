@@ -1,13 +1,11 @@
 package org.owasp.webgoat;
 
-import lombok.AllArgsConstructor;
 import org.owasp.webgoat.session.Course;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -46,9 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since October 28, 2003
  */
 @Controller
-@AllArgsConstructor
 public class HammerHead {
-
     private final Course course;
 
     /**
@@ -57,5 +53,9 @@ public class HammerHead {
     @RequestMapping(path = "/attack", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView attack(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView("redirect:" + "start.mvc" + course.getFirstLesson().getLink());
+    }
+
+    public HammerHead(final Course course) {
+        this.course = course;
     }
 }

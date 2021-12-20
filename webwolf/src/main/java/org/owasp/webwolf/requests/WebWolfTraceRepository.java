@@ -19,15 +19,12 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf.requests;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.trace.http.HttpTrace;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
-
 import java.util.List;
 
 /**
@@ -37,9 +34,8 @@ import java.util.List;
  * @author nbaars
  * @since 8/13/17.
  */
-@Slf4j
 public class WebWolfTraceRepository implements HttpTraceRepository {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(WebWolfTraceRepository.class);
     private final EvictingQueue<HttpTrace> traces = EvictingQueue.create(10000);
     private List<String> exclusionList = Lists.newArrayList("/tmpdir", "/WebWolf/home", "/WebWolf/mail", "/WebWolf/files", "/images/", "/login", "/favicon.ico", "/js/", "/webjars/", "/WebWolf/requests", "/css/", "/mail");
 

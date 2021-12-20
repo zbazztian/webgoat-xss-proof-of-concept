@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.lessons;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
@@ -35,18 +33,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
-
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
 @Configuration
 public class CourseConfiguration {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CourseConfiguration.class);
     private final List<Lesson> lessons;
     private final List<AssignmentEndpoint> assignments;
     private final Map<String, List<AssignmentEndpoint>> assignmentsByPackage;
@@ -81,8 +76,7 @@ public class CourseConfiguration {
                 }
             }
         }
-        throw new IllegalStateException("Assignment endpoint: " + e + " has no mapping like @GetMapping/@PostMapping etc," +
-                "with return type 'AttackResult' or 'ResponseEntity<AttackResult>' please consider adding one");
+        throw new IllegalStateException("Assignment endpoint: " + e + " has no mapping like @GetMapping/@PostMapping etc," + "with return type \'AttackResult\' or \'ResponseEntity<AttackResult>\' please consider adding one");
     }
 
     private boolean methodReturnTypeIsOfTypeAttackResult(Method m) {

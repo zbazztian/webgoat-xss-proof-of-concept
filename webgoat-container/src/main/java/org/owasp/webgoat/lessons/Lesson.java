@@ -19,19 +19,12 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.lessons;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.Singular;
-
 import java.util.List;
 
-@Getter
-@Setter
 public abstract class Lesson {
-
     private static int count = 1;
     private Integer id = null;
     private List<Assignment> assignments;
@@ -42,7 +35,6 @@ public abstract class Lesson {
     public Lesson() {
         id = ++count;
     }
-
 
     /**
      * <p>getName.</p>
@@ -121,5 +113,17 @@ public abstract class Lesson {
 
     public final String getId() {
         return this.getClass().getSimpleName();
+    }
+
+    public List<Assignment> getAssignments() {
+        return this.assignments;
+    }
+
+    public void setId(final Integer id) {
+        this.id = id;
+    }
+
+    public void setAssignments(final List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 }

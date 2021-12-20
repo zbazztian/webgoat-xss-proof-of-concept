@@ -22,14 +22,10 @@
  * projects.
  * <p>
  */
-
 package org.owasp.webgoat;
-
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.Socket;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -44,19 +40,17 @@ import org.springframework.util.StringUtils;
  */
 @SpringBootApplication(scanBasePackages = "org.owasp.webgoat")
 @ServletComponentScan
-@Slf4j
 public class StartWebGoat extends SpringBootServletInitializer {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(StartWebGoat.class);
 
     public static void main(String[] args) {
         log.info("Starting WebGoat with args: {}", StringUtils.arrayToCommaDelimitedString(args));
         System.setProperty("spring.config.name", "application-webgoat");
-
         String webgoatPort = System.getenv("WEBGOAT_PORT");
         String databasePort = System.getenv("WEBGOAT_HSQLPORT");
         String webGoatHost = null == System.getenv("WEBGOAT_HOST") ? "127.0.0.1" : System.getenv("WEBGOAT_HOST");
         int goatPort = webgoatPort == null ? 8080 : Integer.parseInt(webgoatPort);
         int dbPort = databasePort == null ? 9001 : Integer.parseInt(databasePort);
-
         if (isAlreadyRunning(webGoatHost, goatPort)) {
             log.error("Port {}:{} is already in use", webGoatHost, goatPort);
             System.out.println("Port " + webGoatHost + ":" + goatPort + " is in use. Use environment value WEBGOAT_PORT to set a different value.");

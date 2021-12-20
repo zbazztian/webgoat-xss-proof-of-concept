@@ -22,14 +22,11 @@
  * projects.
  * <p>
  */
-
 package org.owasp.webgoat.i18n;
 
-import lombok.AllArgsConstructor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.LocaleResolver;
-
 import java.util.Locale;
 
 /**
@@ -39,13 +36,14 @@ import java.util.Locale;
  * @author nbaars
  * @date 2/7/17
  */
-@AllArgsConstructor
 public class Language {
-
     private final LocaleResolver localeResolver;
 
     public Locale getLocale() {
         return localeResolver.resolveLocale(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
     }
 
+    public Language(final LocaleResolver localeResolver) {
+        this.localeResolver = localeResolver;
+    }
 }

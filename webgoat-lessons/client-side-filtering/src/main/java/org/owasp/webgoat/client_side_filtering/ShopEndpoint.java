@@ -19,21 +19,16 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.client_side_filtering;
 
 import com.beust.jcommander.internal.Lists;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Optional;
-
 import static org.owasp.webgoat.client_side_filtering.ClientSideFilteringFreeAssignment.SUPER_COUPON_CODE;
 
 /**
@@ -44,22 +39,39 @@ import static org.owasp.webgoat.client_side_filtering.ClientSideFilteringFreeAss
 @RequestMapping("/clientSideFiltering/challenge-store")
 public class ShopEndpoint {
 
-    @AllArgsConstructor
     private class CheckoutCodes {
-
-        @Getter
         private List<CheckoutCode> codes;
 
         public Optional<CheckoutCode> get(String code) {
             return codes.stream().filter(c -> c.getCode().equals(code)).findFirst();
         }
+
+        public CheckoutCodes(final List<CheckoutCode> codes) {
+            this.codes = codes;
+        }
+
+        public List<CheckoutCode> getCodes() {
+            return this.codes;
+        }
     }
 
-    @AllArgsConstructor
-    @Getter
+
     private class CheckoutCode {
         private String code;
         private int discount;
+
+        public CheckoutCode(final String code, final int discount) {
+            this.code = code;
+            this.discount = discount;
+        }
+
+        public String getCode() {
+            return this.code;
+        }
+
+        public int getDiscount() {
+            return this.discount;
+        }
     }
 
     private CheckoutCodes checkoutCodes;

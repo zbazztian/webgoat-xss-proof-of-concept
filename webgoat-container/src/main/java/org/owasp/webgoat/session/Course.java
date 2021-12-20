@@ -1,11 +1,8 @@
 package org.owasp.webgoat.session;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.lessons.Category;
-
 import java.util.List;
-
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -38,9 +35,8 @@ import static java.util.stream.Collectors.toList;
  * @version $Id: $Id
  * @since October 28, 2003
  */
-@Slf4j
 public class Course {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Course.class);
     private List<? extends Lesson> lessons;
 
     public Course(List<? extends Lesson> lessons) {

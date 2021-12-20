@@ -40,6 +40,7 @@ jobs:
         queries: security-extended
 
     - run: |
+       mvn -version
        ./delombok.sh
        mvn clean install -DskipTests
 

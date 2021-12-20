@@ -22,10 +22,8 @@
  * projects.
  * <p>
  */
-
 package org.owasp.webgoat.assignments;
 
-import lombok.Getter;
 import org.owasp.webgoat.i18n.PluginMessages;
 import org.owasp.webgoat.session.UserSessionData;
 import org.owasp.webgoat.session.WebSession;
@@ -33,12 +31,10 @@ import org.owasp.webgoat.users.UserTrackerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AssignmentEndpoint {
-
     @Autowired
     private WebSession webSession;
     @Autowired
     private UserSessionData userSessionData;
-    @Getter
     @Autowired
     private PluginMessages messages;
 
@@ -82,5 +78,9 @@ public abstract class AssignmentEndpoint {
 
     protected AttackResult.AttackResultBuilder informationMessage(AssignmentEndpoint assignment) {
         return AttackResult.builder(messages).lessonCompleted(false).assignment(assignment);
+    }
+
+    public PluginMessages getMessages() {
+        return this.messages;
     }
 }

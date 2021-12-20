@@ -19,11 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.challenges;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AttackResult;
 import org.owasp.webgoat.session.WebSession;
@@ -36,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,17 +45,23 @@ import java.util.stream.IntStream;
  */
 @RestController
 public class Flag extends AssignmentEndpoint {
-
     public static final Map<Integer, String> FLAGS = new HashMap<>();
     @Autowired
     private UserTrackerRepository userTrackerRepository;
     @Autowired
     private WebSession webSession;
 
-    @AllArgsConstructor
+
     private class FlagPosted {
-        @Getter
         private boolean lessonCompleted;
+
+        public FlagPosted(final boolean lessonCompleted) {
+            this.lessonCompleted = lessonCompleted;
+        }
+
+        public boolean isLessonCompleted() {
+            return this.lessonCompleted;
+        }
     }
 
     @PostConstruct

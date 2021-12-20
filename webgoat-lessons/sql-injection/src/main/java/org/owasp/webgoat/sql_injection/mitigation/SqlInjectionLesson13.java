@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.sql_injection.mitigation;
 
-import lombok.extern.slf4j.Slf4j;
 import org.owasp.webgoat.LessonDataSource;
 import org.owasp.webgoat.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.assignments.AssignmentHints;
@@ -31,17 +29,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @RestController
-@AssignmentHints(value = {"SqlStringInjectionHint-mitigation-13-1", "SqlStringInjectionHint-mitigation-13-2", "SqlStringInjectionHint-mitigation-13-3", "SqlStringInjectionHint-mitigation-13-4"})
-@Slf4j
+@AssignmentHints({"SqlStringInjectionHint-mitigation-13-1", "SqlStringInjectionHint-mitigation-13-2", "SqlStringInjectionHint-mitigation-13-3", "SqlStringInjectionHint-mitigation-13-4"})
 public class SqlInjectionLesson13 extends AssignmentEndpoint {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SqlInjectionLesson13.class);
     private final LessonDataSource dataSource;
 
     public SqlInjectionLesson13(LessonDataSource dataSource) {
@@ -51,8 +47,9 @@ public class SqlInjectionLesson13 extends AssignmentEndpoint {
     @PostMapping("/SqlInjectionMitigations/attack12a")
     @ResponseBody
     public AttackResult completed(@RequestParam String ip) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("select ip from servers where ip = ? and hostname = ?")) {
+        try (
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("select ip from servers where ip = ? and hostname = ?")) {
             preparedStatement.setString(1, ip);
             preparedStatement.setString(2, "webgoat-prd");
             ResultSet resultSet = preparedStatement.executeQuery();

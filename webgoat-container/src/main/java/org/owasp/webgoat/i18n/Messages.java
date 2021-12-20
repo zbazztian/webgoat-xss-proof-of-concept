@@ -22,12 +22,9 @@
  * projects.
  * <p>
  */
-
 package org.owasp.webgoat.i18n;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
 import java.util.Properties;
 
 /**
@@ -36,9 +33,7 @@ import java.util.Properties;
  *
  * @author zupzup
  */
-@AllArgsConstructor
 public class Messages extends ReloadableResourceBundleMessageSource {
-
     private final Language language;
 
     /**
@@ -56,5 +51,9 @@ public class Messages extends ReloadableResourceBundleMessageSource {
 
     public String getMessage(String code, String defaultValue, Object... args) {
         return super.getMessage(code, args, defaultValue, language.getLocale());
+    }
+
+    public Messages(final Language language) {
+        this.language = language;
     }
 }

@@ -21,11 +21,8 @@
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software
  * projects.
  */
-
 package org.owasp.webgoat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.owasp.webgoat.lessons.Lesson;
 import org.owasp.webgoat.session.WebSession;
@@ -35,30 +32,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
 import java.util.function.Function;
 
 @Controller
-@AllArgsConstructor
-@Slf4j
 public class RestartLessonService {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RestartLessonService.class);
     private final WebSession webSession;
     private final UserTrackerRepository userTrackerRepository;
     private final Function<String, Flyway> flywayLessons;
 
     @RequestMapping(path = "/service/restartlesson.mvc", produces = "text/text")
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public void restartLesson() {
         Lesson al = webSession.getCurrentLesson();
         log.debug("Restarting lesson: " + al);
-
         UserTracker userTracker = userTrackerRepository.findByUser(webSession.getUserName());
         userTracker.reset(al);
         userTrackerRepository.save(userTracker);
-
         var flyway = flywayLessons.apply(webSession.getUserName());
         flyway.clean();
         flyway.migrate();
+    }
+
+    public RestartLessonService(final WebSession webSession, final UserTrackerRepository userTrackerRepository, final Function<String, Flyway> flywayLessons) {
+        this.webSession = webSession;
+        this.userTrackerRepository = userTrackerRepository;
+        this.flywayLessons = flywayLessons;
     }
 }

@@ -19,10 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webgoat.client_side_filtering;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
 import javax.annotation.PostConstruct;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -49,9 +46,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@Slf4j
 public class Salaries {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Salaries.class);
     @Value("${webgoat.user.directory}")
     private String webGoatHomeDirectory;
 
@@ -78,21 +74,18 @@ public class Salaries {
         XPath path = factory.newXPath();
         try (InputStream is = new FileInputStream(d)) {
             InputSource inputSource = new InputSource(is);
-
             StringBuffer sb = new StringBuffer();
-
             sb.append("/Employees/Employee/UserID | ");
             sb.append("/Employees/Employee/FirstName | ");
             sb.append("/Employees/Employee/LastName | ");
             sb.append("/Employees/Employee/SSN | ");
             sb.append("/Employees/Employee/Salary ");
-
             String expression = sb.toString();
             nodes = (NodeList) path.evaluate(expression, inputSource, XPathConstants.NODESET);
         } catch (XPathExpressionException e) {
             log.error("Unable to parse xml", e);
         } catch (IOException e) {
-            log.error("Unable to read employees.xml at location: '{}'", d);
+            log.error("Unable to read employees.xml at location: \'{}\'", d);
         }
         int columns = 5;
         List json = new ArrayList();

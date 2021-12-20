@@ -19,12 +19,8 @@
  *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software projects.
  */
-
 package org.owasp.webwolf;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.owasp.webwolf.user.WebGoatUser;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,22 +32,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-
 import static org.springframework.http.MediaType.ALL_VALUE;
 
 /**
  * Controller for uploading a file
  */
 @Controller
-@Slf4j
 public class FileServer {
-
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FileServer.class);
     @Value("${webwolf.fileserver.location}")
     private String fileLocation;
     @Value("${server.address}")
@@ -65,7 +58,7 @@ public class FileServer {
         return fileLocation;
     }
 
-    @PostMapping(value = "/WebWolf/fileupload")
+    @PostMapping("/WebWolf/fileupload")
     public ModelAndView importFile(@RequestParam("file") MultipartFile myFile) throws IOException {
         WebGoatUser user = (WebGoatUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         File destinationDir = new File(fileLocation, user.getUsername());
@@ -73,29 +66,41 @@ public class FileServer {
         myFile.transferTo(new File(destinationDir, myFile.getOriginalFilename()));
         log.debug("File saved to {}", new File(destinationDir, myFile.getOriginalFilename()));
         Files.createFile(new File(destinationDir, user.getUsername() + "_changed").toPath());
-
         ModelMap model = new ModelMap();
         model.addAttribute("uploadSuccess", "File uploaded successful");
-        return new ModelAndView(
-                new RedirectView("files", true),
-                model
-        );
+        return new ModelAndView(new RedirectView("files", true), model);
     }
 
-    @AllArgsConstructor
-    @Getter
+
     private class UploadedFile {
         private final String name;
         private final String size;
         private final String link;
+
+        public UploadedFile(final String name, final String size, final String link) {
+            this.name = name;
+            this.size = size;
+            this.link = link;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String getSize() {
+            return this.size;
+        }
+
+        public String getLink() {
+            return this.link;
+        }
     }
 
-    @GetMapping(value = "/WebWolf/files")
+    @GetMapping("/WebWolf/files")
     public ModelAndView getFiles(HttpServletRequest request) {
         WebGoatUser user = (WebGoatUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = user.getUsername();
         File destinationDir = new File(fileLocation, username);
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("files");
         File changeIndicatorFile = new File(destinationDir, user.getUsername() + "_changed");
@@ -103,7 +108,6 @@ public class FileServer {
             modelAndView.addObject("uploadSuccess", request.getParameter("uploadSuccess"));
         }
         changeIndicatorFile.delete();
-
         var uploadedFiles = new ArrayList<>();
         File[] files = destinationDir.listFiles(File::isFile);
         if (files != null) {
@@ -113,7 +117,6 @@ public class FileServer {
                 uploadedFiles.add(new UploadedFile(file.getName(), size, link));
             }
         }
-
         modelAndView.addObject("files", uploadedFiles);
         modelAndView.addObject("webwolf_url", "http://" + server + ":" + port);
         return modelAndView;
