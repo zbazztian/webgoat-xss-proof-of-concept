@@ -40,7 +40,7 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        queries: security-and-quality
+        queries: security-and-quality,github/codeql/main/java/ql/src/experimental/Security/CWE/CWE-117/LogInjection.ql@main
 
     - run: |
        ./delombok.sh
