@@ -44,6 +44,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         packs: zbazztian/webgoat-query-pack
+        queries: +security-and-quality
       if: matrix.language == 'java'
         
     - name: Initialize CodeQL
