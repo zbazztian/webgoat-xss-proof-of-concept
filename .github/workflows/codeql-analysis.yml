@@ -40,7 +40,7 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        packs: zbazztian/webgoat
+        packs: zbazztian/webgoat-query-pack
 
     - run: |
        ./delombok.sh
