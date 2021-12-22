@@ -50,6 +50,7 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
+        queries: +security-and-quality
       if: matrix.language == 'javascript'
  
     - run: |
