@@ -1,6 +1,7 @@
 name: "CodeQL"
 
-on:
+on: 
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
@@ -20,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]
+        language: [ 'java' , 'javascript']
 
     steps:
     - name: Checkout repository
@@ -31,10 +32,12 @@ jobs:
         java-version: '17'
         java-package: jdk
         architecture: x64
-
+      if: matrix.language == 'java'
+      
     - run: |
        mvn clean install -DskipTests
-
+      if: matrix.language == 'java'
+      
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
@@ -45,6 +48,7 @@ jobs:
     - run: |
        ./delombok.sh
        mvn clean install -DskipTests
-
+      if: matrix.language == 'java'
+      
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
