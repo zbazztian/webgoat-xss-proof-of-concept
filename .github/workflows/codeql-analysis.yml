@@ -44,6 +44,13 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         packs: zbazztian/webgoat-query-pack
+      if: matrix.language == 'java'
+        
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+        packs: +security-and-quality
 
     - run: |
        ./delombok.sh
