@@ -6,8 +6,6 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  schedule:
-    - cron: '35 14 * * 2'
 
 jobs:
   analyze:
@@ -21,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' , 'javascript']
+        language: [ 'java' ]
 
     steps:
     - name: Checkout repository
@@ -32,32 +30,13 @@ jobs:
         java-version: '17'
         java-package: jdk
         architecture: x64
-      if: matrix.language == 'java'
-      
-    - run: |
-       mvn clean install -DskipTests
-      if: matrix.language == 'java'
-      
-    # Initializes the CodeQL tools for scanning.
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        packs: zbazztian/webgoat-query-pack
-        queries: +security-and-quality
+        config-file: .github/codeql-config.yml
       if: matrix.language == 'java'
-        
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-        queries: +security-and-quality
-      if: matrix.language == 'javascript'
- 
-    - run: |
-       ./delombok.sh
-       mvn clean install -DskipTests
-      if: matrix.language == 'java'
-      
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
