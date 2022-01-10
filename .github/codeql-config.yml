@@ -3,4 +3,4 @@ name: "CodeQL config"
 disable-default-queries: true
 
 queries:
-  - uses: .github/custom-xss/custom-xss.ql
+  - uses: ./.github/custom-xss/custom-xss.ql
