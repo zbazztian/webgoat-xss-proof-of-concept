@@ -36,7 +36,9 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         config-file: .github/codeql-config.yml
-      if: matrix.language == 'java'
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
